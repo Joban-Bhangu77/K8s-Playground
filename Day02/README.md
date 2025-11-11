@@ -1,4 +1,5 @@
-# 🐳 Day 01 — Deploy Nginx Web Server Using Docker (PowerShell)
+# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell),his project is part of my “40 Days of Kubernetes” learning series. A hands-on journey from Docker fundamentals to advanced Kubernetes deployments.
+
 
 ---
 
@@ -133,20 +134,20 @@ docker stop nginx-container
 docker rm nginx-container
 K8s-Playground/
 │
-├── day01_nginx_docker/
+├── day02/
 │   ├── Dockerfile
 │   ├── index.html
 │   ├── Day01_Docker_Lab/
-│   │   ├── Day01_Docker_Version.jpg
-│   │   ├── Day01_Project_Folder_Structure.jpg
-│   │   ├── Day01_HTML_File_Creation.jpg
+│   │   ├── Day02_Docker_Version.jpg
+│   │   ├── Day02_Project_Folder_Structure.jpg
+│   │   ├── Day02_HTML_File_Creation.jpg
 │   │   ├── Day01_Dockerfile_Content.jpg
-│   │   ├── Day01_Docker_Build_Success.jpg
-│   │   ├── Day01_Docker_Run_Success.jpg
-│   │   ├── Day01_Nginx_WebOutput.jpg
-│   │   ├── Day01_Docker_PS_Images_List.jpg
-│   │   ├── Day01_Docker_Logs.jpg
-│   │   └── Day01_Docker_Stop_Remove.jpg
+│   │   ├── Day02_Docker_Build_Success.jpg
+│   │   ├── Day02_Docker_Run_Success.jpg
+│   │   ├── Day02_Nginx_WebOutput.jpg
+│   │   ├── Day02_Docker_PS_Images_List.jpg
+│   │   ├── Day02_Docker_Logs.jpg
+│   │   └── Day02_Docker_Stop_Remove.jpg
 │   └── README.md
 
 💎 Key Takeaways
@@ -159,7 +160,7 @@ K8s-Playground/
 
 🧠 Conclusion
 
-You’ve successfully hosted a custom web page using Nginx inside Docker.
+"I ve successfully hosted a custom web page using Nginx inside Docker.
 This marks your first step toward mastering containerized web applications.
 Next, you can extend this by:
 
@@ -168,3 +169,17 @@ Hosting multiple pages using Docker volumes
 Running multiple containers with Docker Compose
 
 Deploying your container to a Kubernetes cluster
+
+🔧 Key Highlights:
+
+Built a Docker image using a Dockerfile based on Nginx:latest
+
+Copied a custom index.html into the container
+
+Exposed port 80 and mapped it to 8080 on the host
+
+Accessed the running web server via http://localhost:8080
+
+Verified container status, logs, and cleanup using basic Docker commands
+
+This exercise lays the foundation for future days where I will extend the setup using Docker Compose and later deploy it in Kubernetes".
