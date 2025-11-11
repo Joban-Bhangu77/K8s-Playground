@@ -93,7 +93,7 @@ Imagine your **server as a building**:
 
 ---
 
-## 🛠️ How Docker Solves These
+## 🛠️ How Docker Solves These Challenges
 
 | Problem | Docker’s Fix |
 |----------|--------------|
