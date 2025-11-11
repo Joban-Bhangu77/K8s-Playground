@@ -10,7 +10,7 @@
 
 A container packages your app with all its dependencies so it runs consistently across environments — development, testing, or production. 
 
-![What is Docker](./images/docker_intro.jpg) 
+![What is Docker]![Image](https://github.com/user-attachments/assets/b9ba480f-6425-48c5-ab18-a614e56ee48e) 
 
 ---
 
@@ -42,7 +42,7 @@ Docker fixes that.
 
 🖼️ **Visual — Docker vs Virtual Machines**
 
-![Docker vs Virtual Machines](./images/docker_vs_vm.jpg) 
+![Docker vs Virtual Machines]![Image](https://github.com/user-attachments/assets/0348fb7c-636f-48f8-a07f-5950bd5eb962)
 
 ---
 
@@ -61,7 +61,7 @@ Imagine your **server as a building**:
 
 🖼️ **Visual Analogy — Apartments vs Houses**
 
-![Containers vs Virtual Machines Analogy](./images/containers_vs_vms_analogy.jpg)
+![Containers vs Virtual Machines Analogy]![Image](https://github.com/user-attachments/assets/3a560b04-0c24-4ec3-a6e2-096bce32b1a1)
 
 ---
 
@@ -87,7 +87,7 @@ Imagine your **server as a building**:
 
 🖼️ **Visual — How Docker Simplifies Everything**
 
-![How Docker Solves Problems](./images/docker_solution.jpg)
+![How Docker Solves Problems]![Image](https://github.com/user-attachments/assets/e5be9159-af9f-4848-96f7-773dfcac339d)
 
 ---
 
@@ -96,7 +96,7 @@ Imagine your **server as a building**:
 Developers were tired of the “it works on my machine” chaos. 
 So they created a tool to ship **code + environment** together — and Docker was born 🐣 
 
-![Docker Born Meme](./images/docker_born_funny.jpg)
+![Docker Born Meme]![Image](https://github.com/user-attachments/assets/5cd56f8b-a273-42d4-ad1d-cd8b3eaad24a)
 
 ---
 
@@ -112,7 +112,7 @@ Here’s how Docker works in 5 easy steps 👇
 
 🖼️ **Visual — Docker Workflow**
 
-![Docker Workflow](./images/docker_workflow.jpg) 
+![Docker Workflow]![Image](https://github.com/user-attachments/assets/8e9d864c-1e14-4f57-b7b5-89a7338d2e4f)
 
 ---
 
@@ -128,7 +128,7 @@ Docker follows a **Client–Server architecture**:
 
 🖼️ **Visual — Docker Architecture**
 
-![Docker Architecture](./images/docker_architecture.jpg) 
+![Docker Architecture]![Image](https://github.com/user-attachments/assets/dcbce93f-9cd8-4700-af2d-a4f8bca038e0)
 
 ---
 
