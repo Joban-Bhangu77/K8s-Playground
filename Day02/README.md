@@ -1,10 +1,10 @@
-# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell), this project is part of my “40 Days of Kubernetes” learning series.
+# 🐳 Day 02: Deploy Nginx Web Server Using Docker (PowerShell), This Project is Part of My “40 Days of Kubernetes” learning Series.
 
 
 ---
 
 ## 🎯 Objective
-In this lab, you’ll deploy a fully functional **Nginx web server** inside a Docker container using **PowerShell on Windows**.  
+In this lab, I  deployed a fully functional **Nginx web server** inside a Docker container using **PowerShell on Windows**.  
 You’ll create a simple HTML page, build a Docker image, run the container, and access the page from your browser.
 
 ---
@@ -132,6 +132,7 @@ Stop and clean up your environment.
 
 docker stop nginx-container
 docker rm nginx-container
+
 K8s-Playground/
 │
 ├── day02/
@@ -160,7 +161,7 @@ K8s-Playground/
 
 🧠 Conclusion
 
-"I ve successfully hosted a custom web page using Nginx inside Docker.
+I ve successfully hosted a custom web page using Nginx inside Docker.
 This marks your first step toward mastering containerized web applications.
 Next, you can extend this by:
 
@@ -182,4 +183,4 @@ Accessed the running web server via http://localhost:8080
 
 Verified container status, logs, and cleanup using basic Docker commands
 
-This exercise lays the foundation for future days where I will extend the setup using Docker Compose and later deploy it in Kubernetes".
+This exercise lays the foundation for future days where I will extend the setup using Docker Compose and later deploy it in Kubernetes.
