@@ -10,7 +10,7 @@
 
 A container packages your app with all its dependencies so it runs consistently across environments — development, testing, or production.  
 
-![What is Docker](./images/docker_intro.jpg)
+![What is Docker](Day01/images/docker_intro.jpg)
 
 ---
 
