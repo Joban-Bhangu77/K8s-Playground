@@ -28,6 +28,8 @@ Check if Docker Desktop is installed and running.
 ```powershell
 docker --version
 
+https://github.com/user-attachments/assets/bb8b1e49-369f-4bf9-bbe5-7cc449570c83
+
 ✅ Expected Output:
 
 Docker version 27.1.1, build bcfed03
