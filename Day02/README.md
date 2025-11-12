@@ -91,7 +91,6 @@ K8s-Playground/
 </body>
 </html>
 
-
 🧩 Step 4: Write the Dockerfile
 # Use the official Nginx base image from Docker Hub
 FROM nginx:latest
@@ -172,13 +171,13 @@ Stateless Design	Containers are ephemeral and easily replaceable
 
 🧩 Debugging Tips
 
-If port 8080 is already in use, run:
+💎If port 8080 is already in use, run:
 
-docker run -d -p 9090:80 my-nginx-site
+💎docker run -d -p 9090:80 my-nginx-site
 
 To inspect logs:
 
-docker logs nginx-container
+💎docker logs nginx-container
 
 To open a shell inside container:
 
