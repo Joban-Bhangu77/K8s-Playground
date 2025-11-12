@@ -1,11 +1,13 @@
-# 🐳 Day 02: Deploy Nginx Web Server Using Docker (PowerShell), This Project is Part of My “40 Days of Kubernetes” learning Series.
+# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell)
 
+> 🚀 This project is part of my **“40 Days of Kubernetes” Learning Series.**  
+> Today, I deployed a fully functional **Nginx Web Server** inside a Docker container using **PowerShell on Windows**.
 
 ---
 
 ## 🎯 Objective
-In this lab, I  deployed a fully functional **Nginx web server** inside a Docker container using **PowerShell on Windows**.  
-You’ll create a simple HTML page, build a Docker image, run the container, and access the page from your browser.
+
+In this lab, I deployed an **Nginx web server** inside a Docker container, created a simple custom HTML page, built a Docker image, ran the container, and accessed it from the browser.
 
 ---
 
@@ -20,14 +22,23 @@ docker --version
 
 Docker version 27.1.1, build bcfed03
 
+
+🖼️ Screenshot:
+
+
 📁 Step 2: Create a Project Folder
 
 Create a clean directory structure for your project.
+
 cd ~\Desktop
 mkdir K8s-Playground
 cd K8s-Playground
-mkdir day01_nginx_docker
-cd day01_nginx_docker
+mkdir day02_nginx_docker
+cd day02_nginx_docker
+
+
+🖼️ Screenshot:
+
 
 🧾 Step 3: Create an HTML File
 
@@ -36,7 +47,9 @@ Create and edit a simple webpage that Nginx will serve.
 New-Item index.html
 notepad index.html
 
-Paste the following code:
+
+Paste the following HTML:
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -57,6 +70,10 @@ Paste the following code:
   </body>
 </html>
 
+
+🖼️ Screenshot:
+
+
 🧱 Step 4: Create a Dockerfile
 
 Create a Dockerfile that defines your Nginx container.
@@ -64,7 +81,9 @@ Create a Dockerfile that defines your Nginx container.
 New-Item Dockerfile
 notepad Dockerfile
 
-Paste this content:
+
+Paste the following content:
+
 # Use the official Nginx image from Docker Hub
 FROM nginx:latest
 
@@ -74,11 +93,16 @@ COPY index.html /usr/share/nginx/html/index.html
 # Expose port 80 for web access
 EXPOSE 80
 
+
+🖼️ Screenshot:
+
+
 ⚙️ Step 5: Build the Docker Image
 
 Build the image using the Dockerfile.
 
 docker build -t my-nginx-site .
+
 
 ✅ Expected Output:
 
@@ -88,7 +112,11 @@ docker build -t my-nginx-site .
  => exporting to image
  => => naming to my-nginx-site
 
- 🚀 Step 6: Run the Nginx Container
+
+🖼️ Screenshot:
+
+
+🚀 Step 6: Run the Nginx Container
 
 Run the newly built image as a container.
 
@@ -99,15 +127,21 @@ docker run -d -p 8080:80 --name nginx-container my-nginx-site
 
 fce45cbe89011f9e4e439a8b9b9984729f3f3d95f36e51fba3fa6b8924cda5f9
 
+
+🖼️ Screenshot:
+
+
 🌐 Step 7: Access the Website
 
 Open your browser and navigate to:
-
 👉 http://localhost:8080
 
 ✅ You should see:
 
 🚀 Hello from Nginx running inside Docker!
+
+🖼️ Screenshot:
+
 
 🧩 Step 8: Verify Containers and Images
 
@@ -120,11 +154,19 @@ List all Docker images:
 
 docker images
 
+
+🖼️ Screenshot:
+
+
 📜 Step 9: Check Nginx Logs
 
 View Nginx access logs:
 
 docker logs nginx-container
+
+
+🖼️ Screenshot:
+
 
 🛑 Step 10: Stop and Remove the Container
 
@@ -133,16 +175,21 @@ Stop and clean up your environment.
 docker stop nginx-container
 docker rm nginx-container
 
+
+🖼️ Screenshot:
+
+
+📂 Final Project Structure
 K8s-Playground/
 │
-├── day02/
+├── day02_nginx_docker/
 │   ├── Dockerfile
 │   ├── index.html
-│   ├── Day01_Docker_Lab/
+│   ├── Screenshots/
 │   │   ├── Day02_Docker_Version.jpg
 │   │   ├── Day02_Project_Folder_Structure.jpg
 │   │   ├── Day02_HTML_File_Creation.jpg
-│   │   ├── Day01_Dockerfile_Content.jpg
+│   │   ├── Day02_Dockerfile_Content.jpg
 │   │   ├── Day02_Docker_Build_Success.jpg
 │   │   ├── Day02_Docker_Run_Success.jpg
 │   │   ├── Day02_Nginx_WebOutput.jpg
@@ -161,26 +208,21 @@ K8s-Playground/
 
 🧠 Conclusion
 
-I ve successfully hosted a custom web page using Nginx inside Docker.
-This marks your first step toward mastering containerized web applications.
-Next, you can extend this by:
+I successfully hosted a custom web page using Nginx inside Docker.
+This marks the first step toward mastering containerized web applications.
 
-Hosting multiple pages using Docker volumes
+Next steps:
 
-Running multiple containers with Docker Compose
+🧩 Host multiple pages using Docker volumes
 
-Deploying your container to a Kubernetes cluster
+⚙️ Run multi-container setups with Docker Compose
 
-🔧 Key Highlights:
+☸️ Deploy the containerized app into a Kubernetes cluster
 
-Built a Docker image using a Dockerfile based on Nginx:latest
+🔧 Highlights Recap
 
-Copied a custom index.html into the container
-
-Exposed port 80 and mapped it to 8080 on the host
-
-Accessed the running web server via http://localhost:8080
-
-Verified container status, logs, and cleanup using basic Docker commands
-
-This exercise lays the foundation for future days where I will extend the setup using Docker Compose and later deploy it in Kubernetes.
+✅ Built a Docker image using nginx:latest
+✅ Copied a custom index.html into the container
+✅ Exposed port 80 and mapped it to 8080 on the host
+✅ Accessed the web server via http://localhost:8080
+✅ Verified container status, logs, and cleanup
