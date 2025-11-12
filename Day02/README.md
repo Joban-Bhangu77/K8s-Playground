@@ -44,7 +44,7 @@ This is one of the most important exercises before moving toward Kubernetes depl
 docker --version
 docker info
 
-![Image](https://github.com/user-attachments/assets/bb8b1e49-369f-4bf9-bbe5-7cc449570c83)
+(https://github.com/user-attachments/assets/bb8b1e49-369f-4bf9-bbe5-7cc449570c83)
 
 If Docker is running properly, you’ll see the installed version and system info.
 
@@ -73,7 +73,7 @@ K8s-Playground/
 │   │   └── Day01_Docker_Stop_Remove.jpg
 │   └── README.md
 
-![Image](https://github.com/user-attachments/assets/d3a4c2c7-a228-425b-9b51-c35378592774)
+(https://github.com/user-attachments/assets/d3a4c2c7-a228-425b-9b51-c35378592774)
 
 
 🧩 Step 3: Create HTML File
@@ -93,8 +93,7 @@ K8s-Playground/
     <p>This web page is served from a Dockerized Nginx web server.</p>
 </body>
 </html>
-
-![Image](https://github.com/user-attachments/assets/cd059c90-4573-47c4-9b5c-d7ceac3ebb0f)
+(https://github.com/user-attachments/assets/cd059c90-4573-47c4-9b5c-d7ceac3ebb0f)
 
 🧩 Step 4: Write the Dockerfile
 # Use the official Nginx base image from Docker Hub
@@ -109,7 +108,7 @@ EXPOSE 80
 # Default command (already defined in base image)
 CMD ["nginx", "-g", "daemon off;"]
 
-![Image](https://github.com/user-attachments/assets/c7f2568a-af44-4346-b3f1-bd17434ba664)
+(https://github.com/user-attachments/assets/c7f2568a-af44-4346-b3f1-bd17434ba664)
 
 Explanation:
 
@@ -129,7 +128,7 @@ Verify: docker images
 REPOSITORY       TAG       IMAGE ID       CREATED          SIZE
 my-nginx-site    latest    e5b3df12d9aa   10 seconds ago   142MB
 
-![Image](https://github.com/user-attachments/assets/bb8b55c7-c0a2-4c4b-87a6-09499e11a0d6)
+(https://github.com/user-attachments/assets/bb8b55c7-c0a2-4c4b-87a6-09499e11a0d6)
 
 🧩 Step 6: Run the Container
 docker run -d -p 8080:80 --name nginx-container my-nginx-site
@@ -141,7 +140,7 @@ Explanation:
 
 --name → gives the container a readable name
 
-![Image](https://github.com/user-attachments/assets/fbd9cc7e-72d2-48ff-acb3-612b5a3cadb3)
+(https://github.com/user-attachments/assets/fbd9cc7e-72d2-48ff-acb3-612b5a3cadb3)
 
 🧩 Step 7: Test in Browser
 
@@ -149,16 +148,16 @@ Visit: 👉 http://localhost:8080
 
 You should see your custom HTML served from inside the container.
  
-![Image](https://github.com/user-attachments/assets/0c2f10df-6b94-4777-8ae7-67585b162312)
+(https://github.com/user-attachments/assets/0c2f10df-6b94-4777-8ae7-67585b162312)
 
 🧩 Step 8: Verify docker images
 docker images
 
-![Image](https://github.com/user-attachments/assets/c98b8bf5-095e-4f3a-a8dc-870ff7a21a72)
+(https://github.com/user-attachments/assets/c98b8bf5-095e-4f3a-a8dc-870ff7a21a72)
 
 🧩 Step 9: Veriy Docker loges for troubleshooting purposes
 
-![Image](https://github.com/user-attachments/assets/c0bb5374-a475-4ff2-9311-6bc602889c26)
+(https://github.com/user-attachments/assets/c0bb5374-a475-4ff2-9311-6bc602889c26)
 
 
 🧩 Step 10: Stop & Remove Container (Cleanup)
