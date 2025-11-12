@@ -1,13 +1,11 @@
-# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell)
+# 🐳 Day 02: Deploy Nginx Web Server Using Docker (PowerShell), This Project is Part of My “40 Days of Kubernetes” learning Series.
 
-> 🚀 This project is part of my **“40 Days of Kubernetes” Learning Series.**  
-> Today, I deployed a fully functional **Nginx Web Server** inside a Docker container using **PowerShell on Windows**.
 
 ---
 
 ## 🎯 Objective
-
-In this lab, I deployed an **Nginx web server** inside a Docker container, created a simple custom HTML page, built a Docker image, ran the container, and accessed it from the browser.
+In this lab, you’ll deploy a fully functional **Nginx web server** inside a Docker container using **PowerShell on Windows**.  
+You’ll create a simple HTML page, build a Docker image, run the container, and access the page from your browser.
 
 ---
 
@@ -22,23 +20,18 @@ docker --version
 
 Docker version 27.1.1, build bcfed03
 
-
-🖼️ Screenshot:
-
+![Image](https://github.com/user-attachments/assets/bb8b1e49-369f-4bf9-bbe5-7cc449570c83)
 
 📁 Step 2: Create a Project Folder
 
 Create a clean directory structure for your project.
-
 cd ~\Desktop
 mkdir K8s-Playground
 cd K8s-Playground
-mkdir day02_nginx_docker
-cd day02_nginx_docker
+mkdir day01_nginx_docker
+cd day01_nginx_docker
 
-
-🖼️ Screenshot:
-
+![Image](https://github.com/user-attachments/assets/d3a4c2c7-a228-425b-9b51-c35378592774)
 
 🧾 Step 3: Create an HTML File
 
@@ -47,9 +40,9 @@ Create and edit a simple webpage that Nginx will serve.
 New-Item index.html
 notepad index.html
 
+![Image](https://github.com/user-attachments/assets/cd059c90-4573-47c4-9b5c-d7ceac3ebb0f) 
 
-Paste the following HTML:
-
+Paste the following code:
 <!DOCTYPE html>
 <html>
   <head>
@@ -70,10 +63,6 @@ Paste the following HTML:
   </body>
 </html>
 
-
-🖼️ Screenshot:
-
-
 🧱 Step 4: Create a Dockerfile
 
 Create a Dockerfile that defines your Nginx container.
@@ -81,9 +70,10 @@ Create a Dockerfile that defines your Nginx container.
 New-Item Dockerfile
 notepad Dockerfile
 
+![Image](https://github.com/user-attachments/assets/c7f2568a-af44-4346-b3f1-bd17434ba664)
 
-Paste the following content:
 
+Paste this content:
 # Use the official Nginx image from Docker Hub
 FROM nginx:latest
 
@@ -93,16 +83,13 @@ COPY index.html /usr/share/nginx/html/index.html
 # Expose port 80 for web access
 EXPOSE 80
 
-
-🖼️ Screenshot:
-
-
 ⚙️ Step 5: Build the Docker Image
 
 Build the image using the Dockerfile.
 
 docker build -t my-nginx-site .
 
+![Image](https://github.com/user-attachments/assets/bb8b55c7-c0a2-4c4b-87a6-09499e11a0d6)
 
 ✅ Expected Output:
 
@@ -112,38 +99,33 @@ docker build -t my-nginx-site .
  => exporting to image
  => => naming to my-nginx-site
 
-
-🖼️ Screenshot:
-
-
-🚀 Step 6: Run the Nginx Container
+ 🚀 Step 6: Run the Nginx Container
 
 Run the newly built image as a container.
 
 docker run -d -p 8080:80 --name nginx-container my-nginx-site
 
+![Image](https://github.com/user-attachments/assets/fbd9cc7e-72d2-48ff-acb3-612b5a3cadb3)
 
 ✅ Expected Output:
 
 fce45cbe89011f9e4e439a8b9b9984729f3f3d95f36e51fba3fa6b8924cda5f9
 
-
-🖼️ Screenshot:
-
-
 🌐 Step 7: Access the Website
 
 Open your browser and navigate to:
+
 👉 http://localhost:8080
+
 
 ✅ You should see:
 
 🚀 Hello from Nginx running inside Docker!
 
-🖼️ Screenshot:
-
+![Image](https://github.com/user-attachments/assets/0c2f10df-6b94-4777-8ae7-67585b162312)
 
 🧩 Step 8: Verify Containers and Images
+
 
 List all running containers:
 
@@ -152,11 +134,8 @@ docker ps
 
 List all Docker images:
 
+![Image](https://github.com/user-attachments/assets/c98b8bf5-095e-4f3a-a8dc-870ff7a21a72)
 docker images
-
-
-🖼️ Screenshot:
-
 
 📜 Step 9: Check Nginx Logs
 
@@ -164,9 +143,7 @@ View Nginx access logs:
 
 docker logs nginx-container
 
-
-🖼️ Screenshot:
-
+![Image](https://github.com/user-attachments/assets/c0bb5374-a475-4ff2-9311-6bc602889c26)
 
 🛑 Step 10: Stop and Remove the Container
 
@@ -174,22 +151,16 @@ Stop and clean up your environment.
 
 docker stop nginx-container
 docker rm nginx-container
-
-
-🖼️ Screenshot:
-
-
-📂 Final Project Structure
 K8s-Playground/
 │
-├── day02_nginx_docker/
+├── day02/
 │   ├── Dockerfile
 │   ├── index.html
-│   ├── Screenshots/
+│   ├── Day01_Docker_Lab/
 │   │   ├── Day02_Docker_Version.jpg
 │   │   ├── Day02_Project_Folder_Structure.jpg
 │   │   ├── Day02_HTML_File_Creation.jpg
-│   │   ├── Day02_Dockerfile_Content.jpg
+│   │   ├── Day01_Dockerfile_Content.jpg
 │   │   ├── Day02_Docker_Build_Success.jpg
 │   │   ├── Day02_Docker_Run_Success.jpg
 │   │   ├── Day02_Nginx_WebOutput.jpg
@@ -208,21 +179,26 @@ K8s-Playground/
 
 🧠 Conclusion
 
-I successfully hosted a custom web page using Nginx inside Docker.
-This marks the first step toward mastering containerized web applications.
+"I ve successfully hosted a custom web page using Nginx inside Docker.
+This marks your first step toward mastering containerized web applications.
+Next, you can extend this by:
 
-Next steps:
+Hosting multiple pages using Docker volumes
 
-🧩 Host multiple pages using Docker volumes
+Running multiple containers with Docker Compose
 
-⚙️ Run multi-container setups with Docker Compose
+Deploying your container to a Kubernetes cluster
 
-☸️ Deploy the containerized app into a Kubernetes cluster
+🔧 Key Highlights:
 
-🔧 Highlights Recap
+Built a Docker image using a Dockerfile based on Nginx:latest
 
-✅ Built a Docker image using nginx:latest
-✅ Copied a custom index.html into the container
-✅ Exposed port 80 and mapped it to 8080 on the host
-✅ Accessed the web server via http://localhost:8080
-✅ Verified container status, logs, and cleanup
+Copied a custom index.html into the container
+
+Exposed port 80 and mapped it to 8080 on the host
+
+Accessed the running web server via http://localhost:8080
+
+Verified container status, logs, and cleanup using basic Docker commands
+
+This exercise lays the foundation for future days where I will extend the setup using Docker Compose and later deploy it in Kubernetes".
