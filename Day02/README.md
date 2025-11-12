@@ -1,7 +1,6 @@
-# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell)
+# 🐳 Day 02: Deploy Nginx Web Server Using Docker (PowerShell)
 
-> 🚀 This project is part of my **“40 Days of Kubernetes” Learning Series.**  
-> In this lab, you’ll learn how to deploy a simple yet powerful **Nginx web server** inside a Docker container using **PowerShell on Windows** — an essential step toward mastering containerization.
+> 🚀 This project is part of my **“40 Days of Kubernetes” Learning Series.** In this lab, you’ll learn how to deploy a simple yet powerful **Nginx web server** inside a Docker container using **PowerShell on Windows** an essential step toward mastering containerization.
 
 ---
 
