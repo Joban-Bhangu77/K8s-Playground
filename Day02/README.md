@@ -73,7 +73,6 @@ K8s-Playground/
 │   └── README.md
 
 
-
 🧩 Step 3: Create HTML File
 <!DOCTYPE html>
 <html>
@@ -106,8 +105,6 @@ EXPOSE 80
 # Default command (already defined in base image)
 CMD ["nginx", "-g", "daemon off;"]
 
-
-
 Explanation:
 
 FROM defines the base image
@@ -127,7 +124,6 @@ REPOSITORY       TAG       IMAGE ID       CREATED          SIZE
 my-nginx-site    latest    e5b3df12d9aa   10 seconds ago   142MB
 
 
-
 🧩 Step 6: Run the Container
 docker run -d -p 8080:80 --name nginx-container my-nginx-site
 Explanation:
@@ -139,21 +135,18 @@ Explanation:
 --name → gives the container a readable name
 
 
-
 🧩 Step 7: Test in Browser
 
 Visit: 👉 http://localhost:8080
 
 You should see your custom HTML served from inside the container.
- 
 
 
 🧩 Step 8: Verify docker images
-docker images
+    docker images
 
-
-🧩 Step 9: Veriy Docker loges for troubleshooting purposes
-
+🧩 Step 9: Veriy Docker logs for troubleshooting purposes
+    docker logs nginx-container
 
 🧩 Step 10: Stop & Remove Container (Cleanup)
 docker stop nginx-container
@@ -183,11 +176,9 @@ If port 8080 is already in use, run:
 
 docker run -d -p 9090:80 my-nginx-site
 
-
 To inspect logs:
 
 docker logs nginx-container
-
 
 To open a shell inside container:
 
