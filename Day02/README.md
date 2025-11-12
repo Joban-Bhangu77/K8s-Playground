@@ -1,4 +1,4 @@
-# 🐳 Day 02 — Deploy Nginx Web Server Using Docker (PowerShell)
+# 🐳 Day 02: Deploy Nginx Web Server Using Docker (PowerShell)
 
 📚 Part of the **40 Days Kubernetes & DevOps Series — K8s-Playground** 
 
