@@ -1,0 +1,10 @@
+{
+  "name": "day03-multistage-static-site",
+  "version": "1.0.0",
+  "description": "Day 03 - Docker Multi-Stage Build with a simple static site",
+  "scripts": {
+    "build": "mkdir -p build && cp -r src/* build/"
+  },
+  "author": "Jobanjit Singh",
+  "license": "MIT"
+}
