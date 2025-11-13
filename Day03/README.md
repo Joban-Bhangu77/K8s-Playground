@@ -1,31 +1,42 @@
 🐳 Day 03 – Docker Multi-Stage Builds (Node + Nginx)
 
-This project demonstrates how to build a production-ready Docker container using Multi-Stage Builds.
-By separating the build environment from the runtime environment, we create a final image that is lightweight, secure, and optimized for cloud and DevOps workloads.
+This project demonstrates how how to build a production-ready Docker image using Multi-Stage Builds, a technique that greatly improves container efficiency by separating the build environment (Node.js) from the runtime environment (Nginx).
 
-The application is built using Node.js and served using Nginx, following industry-grade containerization best practices.
+By doing so, the final image becomes:
 
-🧠 What This Project Covers
+Lightweight
 
-Building a simple static site using Node.js
+More secure
 
-Implementing Docker Multi-Stage Builds
+Faster to deploy
 
-Serving optimized static files using Nginx
+Easier to maintain
 
-Running and inspecting Docker containers
+Perfect for cloud & Kubernetes environments
 
-Viewing logs and performing container operations
+🧠 Overview
 
-Adding screenshots for documentation
+This project focuses on implementing Multi-Stage Docker Builds to:
 
-Multi-Stage Builds provide:
+Build a simple static site using Node.js
 
-✔ Smaller final image size
-✔ Better security (no build tools in production)
+Generate an optimized build output
+
+Serve the application using Nginx
+
+Reduce image size by removing build-time dependencies
+
+Run and debug the application using Docker commands
+
+Capture and showcase results with screenshots
+
+Why Multi-Stage Builds?
+
+✔ Smaller final images
+✔ No build tools in production
 ✔ Faster CI/CD pipelines
-✔ Clear separation of build vs runtime
-✔ Cloud & Kubernetes-ready images
+✔ Clear separation of build and runtime
+✔ Best practice for cloud-native applications
 
 🛠️ Multi-Stage Dockerfile
 
@@ -40,11 +51,21 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+
 FROM nginx:latest AS runtime
 COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+
+
+This Dockerfile ensures that:
+
+Node.js stays in the builder stage only
+
+The final Nginx image contains only the static build output
+
+No unnecessary dependencies reach the runtime image
 
 📦 Build the Docker Image
 docker build -t day03-app .
@@ -56,7 +77,7 @@ docker build -t day03-app .
 docker run -d -p 8080:80 --name day03-container day03-app
 
 
-Check running containers:
+Verify the running container:
 
 docker ps
 
@@ -65,7 +86,7 @@ docker ps
 
 🌐 Access the Application
 
-Open in browser:
+Open your browser and visit:
 
 http://localhost:8080
 
@@ -80,62 +101,62 @@ docker logs day03-container
 
 🔧 Useful Docker Commands
 
-Restart container:
+Restart the container:
 
 docker restart day03-container
 
 
-Stop container:
+Stop the container:
 
 docker stop day03-container
 
 
-Start container:
+Start the container:
 
 docker start day03-container
 
 
-Remove container:
+Remove the container:
 
 docker rm -f day03-container
 
 
-Remove image:
+Remove the image:
 
 docker rmi day03-app
 
 
-Inspect container:
+Inspect container details:
 
 docker inspect day03-container
 
 
-Follow live logs:
+Follow logs live:
 
 docker logs -f day03-container
 
 
-Enter container shell:
+Open shell inside the container:
 
 docker exec -it day03-container sh
 
 💡 Key Takeaways
 
-Multi-stage builds drastically reduce image size
+Multi-Stage Builds dramatically reduce final image size
 
-Node.js build environment stays out of production
+Node.js build stage stays completely out of production
 
-Clean Nginx runtime ensures optimal performance
+Nginx provides a clean, efficient static file server
 
-Faster builds, pushes, and deployments
+Faster builds, pushes, pulls, and deployments
 
-Greatly enhances security and maintainability
+Stronger runtime security
 
-Ideal method for DevOps, cloud, and Kubernetes workflows
+A best-practice approach for DevOps and Kubernetes workflows
 
 🧭 Conclusion
 
-This project highlights how Docker Multi-Stage Builds create secure, lightweight, and production-ready container images.
-By isolating build dependencies from runtime execution, we achieve better performance, tighter security, and greater deployment efficiency.
+This project highlights how Docker Multi-Stage Builds enable efficient, secure, and production-ready container images.
+By splitting the build and runtime environments, we eliminate unnecessary dependencies, reduce attack surface, and create highly optimized images suitable for scalable, modern cloud deployments.
 
-This workflow aligns with modern DevOps and cloud-native best practices and is essential for scalable application deploymen
+This technique is essential for anyone working with containers, DevOps pipelines, or Kubernetes-based architectures
