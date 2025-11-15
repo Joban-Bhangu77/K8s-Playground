@@ -1,4 +1,4 @@
-# 📘 Day 05 — The Definitive Guide to Kubernetes Architecture
+# 📘 Day 05: The Definitive Guide to Kubernetes Architecture
 
 ***
 
