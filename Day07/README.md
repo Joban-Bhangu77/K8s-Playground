@@ -48,73 +48,65 @@ spec:
   containers:
   - name: nginx-container
     image: nginx:latest
-Important YAML Rules in Kubernetes
-Indentation = 2 spaces
 
-No tabs allowed
+🔹Important YAML Rules in Kubernetes
 
-Lists begin with "-"
+🔹Indentation = 2 spaces
 
-Keys must be aligned correctly
+🔹No tabs allowed
 
-Order of main sections matters (apiVersion, kind, metadata, spec)
+🔹Lists begin with "-"
 
-🏗️ TASK 1 — Create a Pod Using Imperative Commands
+🔹Keys must be aligned correctly
+
+🔹Order of main sections matters (apiVersion, kind, metadata, spec)
+
+🏗️ TASK 1— Create a Pod Using Imperative Commands
+
 First, we used the kubectl run command to create a Pod quickly using an image.
 
 Command
-bash
-Copy code
 kubectl run nginx --image=nginx
+
 Verify
-bash
-Copy code
 kubectl get pods
 kubectl describe pod nginx
-🏗️ TASK 2 — Generate YAML From an Imperative Pod & Recreate
-Step 1 — Export YAML from Running Pod
-bash
-Copy code
-kubectl get pod nginx -o yaml > nginx.yaml
-Step 2 — Edit and Clean the YAML
+
+🏗️ TASK 2— Generate YAML From an Imperative Pod & Recreate
+
+Step 2— Edit and Clean the YAML
+
 Remove automatically generated fields:
 
-status
+🔹status
 
-uid
+🔹uid
 
-resourceVersion
+🔹resourceVersion
 
 creationTimestamp
 
-managedFields
+🔹managedFields
 
-selfLink
+🔹selfLink
+
 
 Update the Pod name:
-
-yaml
-Copy code
 metadata:
   name: nginx-new
-Step 3 — Apply the New YAML
-bash
-Copy code
-kubectl apply -f nginx.yaml
-Step 4 — Verify Creation
-bash
-Copy code
-kubectl get pods
-Expected output includes:
 
-cpp
-Copy code
+Step 3— Apply the New YAML
+kubectl apply -f nginx.yaml
+
+Step 4 — Verify Creation
+kubectl get pods
+
+Expected output includes:
 nginx
 nginx-new
+
 🧪 TASK 3 — Apply Faulty YAML, Identify Issues, and Fix Them
 Provided YAML (with errors)
-yaml
-Copy code
 apiVersion: v1
 kind: Pod
 metadata:
@@ -125,54 +117,52 @@ spec:
   containers:
   - image: rediss
     name: redis
+
 The issue: image name "rediss" is incorrect → the Pod will fail with ImagePullBackOff.
 
 Step-by-Step Troubleshooting
 Apply the YAML
-bash
-Copy code
 kubectl apply -f redis.yaml
+
 Check Pod status
-bash
-Copy code
 kubectl get pods
+
+
 You will see:
 
-nginx
-Copy code
 ErrImagePull
+
 Describe the Pod for exact error
-bash
-Copy code
 kubectl describe pod redis
+
+
 Expected message:
 
-arduino
-Copy code
 Failed to pull image "rediss": image not found
 Back-off pulling image "rediss"
+
+
 This confirms the incorrect image name.
 
 Fix the YAML File
+
 Correct the image name:
 
-yaml
-Copy code
 image: redis
+
 Reapply:
-bash
-Copy code
 kubectl apply -f redis.yaml
+
 Final Verification:
-bash
-Copy code
 kubectl get pods
+
+
 Expected:
 
-sql
-Copy code
 redis   Running
+
 🟦 Key Takeaways
+
 YAML is the backbone of Kubernetes configuration
 
 Declarative manifests make deployments scalable and automated
@@ -186,6 +176,7 @@ ImagePullBackOff errors often relate to incorrect image names
 Clean YAML files before recreating Pods from exported manifests
 
 🏁 Conclusion
+
 Today’s session provided deep hands-on experience with Kubernetes YAML, a foundational skill for anyone working with Kubernetes, DevOps, Cloud Engineering, or GitOps. You learned how to:
 
 Create Pods imperatively
@@ -200,22 +191,25 @@ These concepts prepare you for upcoming topics like Deployments, ReplicaSets, Se
 
 📚 References
 1. Official Kubernetes Documentation — YAML & Object Management
+
 https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
 
 2. Kubernetes — Managing Resources with kubectl
+
 https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/
 
 3. YAML Official Specification
+
 https://yaml.org/spec/
 
 4. Kubernetes Pods Documentation
+
 https://kubernetes.io/docs/concepts/workloads/pods/
 
 5. Kubernetes Troubleshooting Guide (ImagePullBackOff)
+
 https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#imagepullbackoff
 
 6. kubectl Command Reference
-https://kubernetes.io/docs/reference/kubectl/
 
-yaml
-Copy code
+https://kubernetes.io/docs/reference/kubectl/
