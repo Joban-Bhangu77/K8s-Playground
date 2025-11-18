@@ -84,7 +84,7 @@ Remove automatically generated fields:
 
 🔹resourceVersion
 
-creationTimestamp
+🔹creationTimestamp
 
 🔹managedFields
 
