@@ -1,37 +1,37 @@
-📘 Day 08 – Kubernetes ReplicationController, ReplicaSet & Deployment
+☸️ Day 08 – ReplicationController, ReplicaSet & Deployment
 
 Kubernetes 40-Days Series — K8s-Playground
 
-🚀 Overview
+📘 Overview
 
-Day 08 focuses on three fundamental Kubernetes workload controllers:
+Day 08 focuses on three essential Kubernetes workload controllers:
 
-ReplicationController (RC)
+🔹 ReplicationController (RC)
 
-ReplicaSet (RS)
+🔹 ReplicaSet (RS)
 
-Deployment
+🔹 Deployment
 
-These controllers ensure scalability, high availability, and reliable updates across applications running inside Kubernetes clusters.
-Today’s work included creating and validating these controllers, scaling workloads, updating images, managing rollouts, and performing rollbacks.
+These objects ensure scalability, high availability, and automated rollout/rollback of containerized applications.
+Today, I created and configured all three, updated replica counts, performed rollouts, viewed revision history, and tested rollback scenarios.
 
 🧩 1. ReplicationController (RC)
-What is a ReplicationController?
 
-A ReplicationController ensures that a specified number of Pod replicas are always running.
-Although older and mostly replaced by ReplicaSets, it remains valuable for understanding Kubernetes' evolution.
+🔍 What Is a ReplicationController?
 
-Key Features
+A ReplicationController ensures that a specified number of identical Pods are always running.
+Although considered legacy today, understanding RC helps build a foundation for modern workload controllers.
 
-Ensures a fixed number of replicas are running
+⭐ Key Responsibilities
 
-Replaces failed Pods automatically
+🔹 Maintains desired replica count
 
-Uses label-based selectors
+🔹 Replaces failed Pods automatically
 
-Legacy controller (superseded by ReplicaSet)
+🔹 Uses labels + selectors to manage Pods
 
-Sample RC YAML
+📝 Sample RC YAML
+
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -51,198 +51,125 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.7.9
-        ports:
-        - containerPort: 80
+        image: nginx:latest
 
-🧩 2. ReplicaSet (RS)
-What is a ReplicaSet?
+        🧩 2. ReplicaSet (RS)
 
-A ReplicaSet is the modern and improved version of a ReplicationController.
-It maintains a stable set of running Pods and is commonly used underneath Deployments.
+🔍 What Is a ReplicaSet?
 
-Key Features
+A ReplicaSet is the successor of the ReplicationController.
+It uses label selectors and is typically managed through a Deployment.
 
-Ensures desired number of Pods
+⭐ Key Responsibilities
 
-Uses set-based selectors
+🔹 Ensures the correct number of Pod replicas
 
-Automatically replaces Pods
+🔹 Uses set-based selectors
 
-Forms the backend for Deployments
+🔹 More flexible than RC
 
-Sample ReplicaSet YAML
+📝 Sample ReplicaSet YAML
+
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: nginx-rs
-  labels:
-    env: demo
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: nginx
-      env: demo
+      tier: frontend
   template:
     metadata:
       labels:
         app: nginx
-        env: demo
+        tier: frontend
     spec:
       containers:
       - name: nginx
-        image: nginx:1.7.9
+        image: nginx:1.25
+
+🧩 3. Deployment
+
+🔍 What Is a Deployment?
+
+A Deployment is the most commonly used workload controller in Kubernetes.
+It manages rollouts, rollbacks, scaling, strategy, and ReplicaSets.
+
+⭐ Key Responsibilities
+
+🔹 Declarative Pod/ReplicaSet updates
+
+🔹 Automated rollouts
+
+🔹 Rollback to previous revisions
+
+🔹 Rolling updates & max surge/max unavailable control
+
+📝 Sample Deployment YAML
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
         ports:
         - containerPort: 80
 
-🧩 3. Deployment
-What is a Deployment?
-
-A Deployment is the most advanced and widely used Kubernetes controller. It provides a declarative way to manage application updates while ensuring zero downtime.
-
-Key Features
-
-Declarative updates
-
-Rollback support
-
-Rollout history tracking
-
-Automatic strategy management (rolling updates)
-
-Scales applications seamlessly
-
-Manages underlying ReplicaSets
-
-🛠️ Task 8/40 – Practical Hands-On Exercises
-✅ ReplicaSet Practice
-1. Create a ReplicaSet with 3 replicas
-kubectl apply -f nginx-rs.yaml
-kubectl get rs
-kubectl get po
-
-2. Update replicas to 4 (via YAML)
-
-Edit YAML:
-
-replicas: 4
-
-
-Apply:
-
-kubectl apply -f nginx-rs.yaml
-
-3. Update replicas to 6 (via command line)
-kubectl scale rs nginx-rs --replicas=6
-kubectl get rs
-
-✅ Deployment Practice
-1. Create a Deployment using nginx:1.23.0 (3 replicas)
-kubectl create deployment nginx \
-  --image=nginx:1.23.0 \
-  --replicas=3 \
-  --dry-run=client -o yaml > nginx-deploy.yaml
-
-
-Add labels:
-
-metadata:
-  labels:
-    tier: backend
-template:
-  metadata:
-    labels:
-      app: v1
-
-
-Apply:
-
-kubectl apply -f nginx-deploy.yaml
-kubectl get deploy
-kubectl get po
-
-2. Update image to nginx:1.23.4
-kubectl set image deploy/nginx nginx=nginx:1.23.4
-kubectl rollout status deploy/nginx
-
-3. Add change cause annotation
-kubectl annotate deploy/nginx kubernetes.io/change-cause="Pick up patch version"
-
-4. Scale Deployment to 5 replicas
-kubectl scale deploy/nginx --replicas=5
-kubectl get deploy
-
-5. View rollout history
-kubectl rollout history deploy/nginx
-
-6. Roll back to Revision 1
-kubectl rollout undo deploy/nginx --to-revision=1
-
-
-Verify:
-
-kubectl get po -o wide
-
-
-Expected image:
-
-nginx:1.23.0
-
-🔍 Troubleshooting Commands (Quick Reference)
-🔹 Deployment
-kubectl get deploy
-kubectl describe deploy <name>
-kubectl rollout status deploy/<name>
-kubectl rollout history deploy/<name>
-kubectl rollout undo deploy/<name>
-kubectl set image deploy/<name> container=image:tag
-kubectl scale deploy/<name> --replicas=X
-
-🔹 ReplicaSet
-kubectl get rs
-kubectl describe rs <name>
-kubectl scale rs <name> --replicas=X
+🛠️ Commands Practiced Today:
 
 🔹 ReplicationController
+kubectl create -f rc.yaml
 kubectl get rc
-kubectl describe rc <name>
-kubectl delete rc <name>
+kubectl delete rc nginx-rc
 
-🔹 Pods
-kubectl get po -o wide
-kubectl describe po <name>
-kubectl logs <pod-name>
-kubectl exec -it <pod-name> -- /bin/bash
+🔹 ReplicaSet
+kubectl create -f rs.yaml
+kubectl get rs
+kubectl scale rs nginx-rs --replicas=5
+kubectl delete rs nginx-rs
+
+🔹 Deployment
+kubectl create -f deploy.yaml
+kubectl get deployment
+kubectl rollout status deployment nginx-deployment
+kubectl rollout history deployment nginx-deployment
+kubectl rollout undo deployment nginx-deployment
+kubectl delete deployment nginx-deployment
+
+🚀 Key Takeaways
+
+🔹 ReplicationController → Legacy but useful for fundamentals
+
+🔹 ReplicaSet → Modern controller ensuring Pod availability
+
+🔹 Deployment → Most powerful & widely used; handles rollout/rollback
+
+🔹 Scaling, rolling updates, and revision history are crucial for production workloads
+
+🔹 Label selectors are the backbone of Kubernetes object management
 
 🏁 Conclusion
 
-Day 08 strengthened understanding of Kubernetes workload controllers:
+Day 08 strengthened my understanding of Kubernetes workload controllers—how Pods are replicated, updated, and managed at scale. These concepts form the foundation for real-world application deployment in Kubernetes clusters.
 
-ReplicationController — legacy controller ensuring Pod replication
+🔗 References
 
-ReplicaSet — improved version with set-based selectors
+🔹 Kubernetes Official Docs – https://kubernetes.io/docs/
 
-Deployment — most advanced, supports rollouts, rollbacks, scaling, and strategy management
+🔹 Workload Controllers – https://kubernetes.io/docs/concepts/workloads/controllers/
 
-By completing these exercises, you learned how to:
-
-✔ Create and scale workloads
-✔ Update container images
-✔ Monitor rollouts
-✔ View revision history
-✔ Perform rollbacks
-✔ Fix YAML and selector issues
-✔ Troubleshoot using kubectl
-
-These concepts are critical for real-world production Kubernetes deployments, ensuring reliability, availability, and zero-downtime updates.
-
-📚 References
-
-Kubernetes Documentation — https://kubernetes.io/docs/home/
-
-Deployments — https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-
-ReplicaSets — https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-
-Kubectl Cheat Sheet — https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+🔹 Deployments – https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
