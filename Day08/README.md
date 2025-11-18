@@ -218,11 +218,10 @@ spec:
         
 🛠️ Key Commands Practiced
 Controller,Command Example,Purpose
-RC,kubectl create -f rc.yaml,Creates the ReplicationController.
-RS,kubectl scale rs nginx-rs --replicas=5,Imperatively scales the number of replicas for a ReplicaSet.
-Deployment,kubectl get deployment,Lists all Deployments.
-Deployment,kubectl rollout status deployment nginx-deployment,Tracks the progress of the current rollout.
-Deployment,kubectl rollout undo deployment nginx-deployment,Reverts the Deployment to a previous revision.
+Controller,Status,Primary Function,Core Feature
+ReplicationController (RC),Legacy,Ensures a desired number of Pod replicas are running.,Basic equality-based selector.
+ReplicaSet (RS),Modern,Ensures a desired number of Pod replicas are running.,Advanced set-based selectors.
+Deployment,Standard,Provides declarative updates for Pods and ReplicaSets.,Manages RS for rollouts/rollbacks.
 
 🚀 Key TakeawaysHierarchy: Deployment manages ReplicaSets $\rightarrow$ Pods.Modern Standard: Always use Deployment for production application lifecycle management.Core Mechanism: Label selectors are the foundation for controller-to-Pod association.High Availability: Deployments ensure HA through automated scaling and managed rolling updates.
 
