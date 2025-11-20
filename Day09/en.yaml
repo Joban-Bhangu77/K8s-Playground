@@ -1,0 +1,8 @@
+apiversion: v1
+Kind : Service
+Metadata:
+  name: nodeport-svc
+  namespace: prod
+spec:
+type: ExternalName
+  externalName: my.daabase.example.com
