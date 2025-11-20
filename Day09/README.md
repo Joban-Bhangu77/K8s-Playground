@@ -22,12 +22,11 @@ Kubernetes **Pods** are designed to be short-lived, with dynamic IP addresses th
 
 The choice of Service type determines the accessibility and deployment context of your application.
 
-| Service Type | Primary Access | Use Case | Accessibility |
-| :--- | :--- | :--- | :--- |
-| **ClusterIP** (Default) | Internal Cluster | Backend APIs, internal microservices, database connections. | Only inside the cluster. |
-| **NodePort**	External (Node-Level)	http://<NodeIP>:<NodePort> (30000-32767)	Local development, quick testing, environments without cloud load balancers.
-| **LoadBalancer** | Cloud-managed Public IP | Production applications requiring public internet exposure. | Public internet access. **Requires a cloud provider.** |
-| **ExternalName** | External DNS Name | Connecting to external services (e.g., cloud databases, external APIs). | DNS redirection only (no proxying). |
+Service Type	Scope	Access Point	Recommended Use Case
+ClusterIP (Default)	Internal	Virtual IP	Backend services, internal microservices, databases.
+NodePort	External (Node-Level)	http://<NodeIP>:<NodePort> (30000-32767)	Local development, quick testing, environments without cloud load balancers.
+LoadBalancer	External (Cloud-Level)	Public IP	Production public-facing web applications. Requires cloud integration (AWS, GCP, Azure).
+ExternalName	Redirection	DNS CNAME	Connecting to external resources outside the cluster (e.g., SaaS APIs, external databases).
 
 ### Detailed Breakdown
 
