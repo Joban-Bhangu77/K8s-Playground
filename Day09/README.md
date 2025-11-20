@@ -25,7 +25,7 @@ The choice of Service type determines the accessibility and deployment context o
 | Service Type | Primary Access | Use Case | Accessibility |
 | :--- | :--- | :--- | :--- |
 | **ClusterIP** (Default) | Internal Cluster | Backend APIs, internal microservices, database connections. | Only inside the cluster. |
-| **NodePort** | Node IP and Static Port | Local development, testing, non-production environments. | $\text{http://<NodeIP>:\text{<NodePort>}}$ |
+| **NodePort**	External (Node-Level)	http://<NodeIP>:<NodePort> (30000-32767)	Local development, quick testing, environments without cloud load balancers.
 | **LoadBalancer** | Cloud-managed Public IP | Production applications requiring public internet exposure. | Public internet access. **Requires a cloud provider.** |
 | **ExternalName** | External DNS Name | Connecting to external services (e.g., cloud databases, external APIs). | DNS redirection only (no proxying). |
 
