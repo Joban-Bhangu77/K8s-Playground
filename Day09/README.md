@@ -1,77 +1,54 @@
-Day 08 – Kubernetes Services: ClusterIP, NodePort & LoadBalancer (Hands-On Guide)
+# Kubernetes Services: ClusterIP, NodePort and LoadBalancer  
+Kubernetes 40-Day Series – Day 09
 
-Part of the Kubernetes 40-Day Series — K8s-Playground
+This document explains Kubernetes Services and includes the hands-on work completed in this session. Services provide stable networking for dynamic Pods and allow internal and external access depending on the Service type.
 
-This README documents the full hands-on work completed for Day 08, focusing on how Kubernetes Services provide stable and reliable networking for dynamic Pods.
-In this session, you deployed an NGINX application, exposed it using a Service, validated internal and external connectivity, and explored when to use ClusterIP, NodePort, LoadBalancer, and ExternalName Services.
+## Overview
 
-📘 Overview
+Kubernetes Pods have dynamic IPs and can restart, scale or reschedule at any time. Services provide a stable way to access these Pods using:
+- A virtual IP inside the cluster
+- A DNS name
+- Load balancing across multiple Pods
 
-Kubernetes Pods are ephemeral — they restart, scale, reschedule, and change IPs frequently. Relying on Pod IPs for communication leads to instability.
-Kubernetes solves this through Services, which provide:
+In this session, the following Service types were explored:
+- ClusterIP
+- NodePort
+- LoadBalancer
+- ExternalName (brief overview)
 
-A stable virtual IP (ClusterIP)
+## Kubernetes Service Types
 
-A consistent DNS name
+### ClusterIP
+- Default Service type
+- Accessible only inside the cluster
+- Used for backend APIs and internal microservices
+- Not reachable from outside the cluster
 
-Load balancing across multiple Pods
+### NodePort
+- Opens a port between 30000 and 32767 on each worker node
+- Accessible externally using http://NodeIP:NodePort
+- Useful for local clusters, testing or development
+- Not recommended for production
 
-Decoupled and resilient networking independent of Pod lifecycle
+### LoadBalancer
+- Creates a cloud-managed load balancer
+- Provides a public IP
+- Ideal for production applications
+- Requires a cloud provider such as AWS, Azure or GCP
 
-This day covers:
+### ExternalName (Brief)
+- Maps a Service to an external DNS name
+- No ClusterIP created
+- Uses DNS redirection only
+- Helpful when connecting to external databases or APIs
 
-ClusterIP
+## Hands-On Work
 
-NodePort
+### 1. Create the NGINX Deployment
 
-LoadBalancer
+File: myapp-deploy.yaml
 
-ExternalName
-
-Hands-on internal and external traffic testing
-
-📌 Kubernetes Service Types (Summary)
-1. ClusterIP (Default)
-
-Accessible inside the cluster only
-
-For internal microservices, backend APIs
-
-Most secure & commonly used
-
-2. NodePort
-
-Accessible externally at:
-
-http://<NodeIP>:<NodePort>
-
-
-Great for local clusters (Kind, Minikube), dev/test
-
-Not ideal for production
-
-3. LoadBalancer
-
-Cloud providers (AWS/GCP/Azure) create a public load balancer
-
-Ideal for production and public-access workloads
-
-4. ExternalName
-
-DNS-only mapping to an external hostname
-
-No ClusterIP or proxying
-
-Used to connect Kubernetes workloads to external systems (DBs, APIs)
-
-🛠️ Hands-On Implementation — Day 08 Work
-
-This section outlines every step performed today.
-
-1️⃣ Deploy the NGINX Application
-
-Create myapp-deploy.yaml:
-
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -92,18 +69,13 @@ spec:
           ports:
             - containerPort: 80
 
-
 Apply:
-
 kubectl apply -f myapp-deploy.yaml
 kubectl get pods -o wide
 
+2. Create a ClusterIP Service
 
-✔ One NGINX Pod is running.
-
-2️⃣ Create a ClusterIP Service
-
-Create myapp-svc.yaml:
+File: myapp-svc.yaml
 
 apiVersion: v1
 kind: Service
@@ -117,86 +89,53 @@ spec:
     - port: 80
       targetPort: 80
 
-
 Apply:
-
 kubectl apply -f myapp-svc.yaml
 kubectl get svc myapp
 
-
-✔ This service is reachable only from inside the cluster.
-
-3️⃣ Scale the Deployment
+3. Scale the Deployment
 kubectl scale deployment myapp --replicas=2
 kubectl get pods -o wide
 
-
-✔ Service now load balances between 2 Pods.
-
-4️⃣ Test Internal Access Using BusyBox
+4. Test Internal Access
 kubectl run testpod --image=busybox -it --restart=Never -- wget -O- http://myapp
 
 
 If DNS fails:
 
-kubectl run testpod --image=busybox -it --restart=Never -- wget -O- http://<CLUSTER-IP>
+kubectl run testpod --image=busybox -it --restart=Never -- wget -O- http://ClusterIP
+
+5. Test External Access (Expected Failure)
+wget http://ClusterIP
 
 
-✔ You receive the NGINX default HTML page.
+ClusterIP cannot be accessed from outside the cluster.
 
-5️⃣ Attempt External Access (Expected Failure)
-
-From host:
-
-wget http://<CLUSTER-IP>
-
-
-❌ Expected: Connection fails
-Reason: ClusterIP is internal-only.
-
-6️⃣ Convert ClusterIP → NodePort
-
-Edit Service:
+6. Convert the Service to NodePort
 
 kubectl edit svc myapp
 
 
-Change:
-
-type: ClusterIP
-
-
-to:
+Change the type to:
 
 type: NodePort
 
 
-Save → exit → check:
+Check the updated Service:
 
 kubectl get svc myapp
 
 
-✔ NodePort assigned (example: 32xxx).
+A NodePort will appear, for example 32010.
 
-7️⃣ Access the Application Externally
-
-From host:
-
-wget http://<NodeIP>:<NodePort>
+7. Test External Access Using NodePort
+wget http://NodeIP:NodePort
 
 
 For Kind:
+wget http://127.0.0.1:NodePort
 
-wget http://127.0.0.1:<NodePort>
-
-
-✔ Application is now accessible from outside the cluster.
-
-📦 LoadBalancer Service (Conceptual Example)
-
-Used in cloud environments for public access.
-
-Example:
+LoadBalancer Example (Conceptual Only)
 
 apiVersion: v1
 kind: Service
@@ -210,51 +149,28 @@ spec:
     - port: 80
       targetPort: 80
 
+When to Use Each Type
 
-✔ Cloud provider assigns a public IP
-✔ Ideal for production workloads
-
-📘 When to Use Each Service Type
 ClusterIP
 
-Internal access
-
-Backend APIs, microservices
-
-Default & secure
+Internal communication only
 
 NodePort
 
-Simple external access
-
-Local development & testing
-
-Not production-grade
+Local testing or development
 
 LoadBalancer
 
-Production internet-facing services
-
-Requires cloud provider integration
-
-Scalable, reliable
+Production and public access
 
 ExternalName
 
-DNS mapping to external resources
+External DNS mapping
 
-No proxying or ClusterIP
+Conclusion
 
-🟦 Conclusion
+This session demonstrated how Kubernetes Services provide stable access to Pods, enable internal and external connectivity, and support load balancing across replicas. You deployed an application, exposed it internally, validated access, scaled Pods, and enabled external access through NodePort. These concepts form the foundation for advanced Kubernetes networking such as Ingress, service mesh and API gateways.
 
-Day 08 introduced one of the most important concepts in Kubernetes: Services. You learned how Services abstract Pod IP changes, provide stable DNS names, balance traffic across replicas, and enable both internal and external connectivity.
-Through hands-on practice, you deployed an application, exposed it internally, scaled it, tested routing with BusyBox, and enabled external access using NodePort.
+Medium Post Link
 
-With this foundation, you are now ready to explore advanced networking topics such as Ingress controllers, API gateways, TLS termination, service meshes, and network policies.
-
-🔗 Medium Hands-On Article Link (Add After Publishing)
-
-Paste your Medium link here:
-
-🔗 Medium Article:
-<ADD YOUR MEDIUM LINK HERE>
+(Add your Medium link here)
