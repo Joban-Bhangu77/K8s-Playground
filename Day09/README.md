@@ -51,7 +51,7 @@ The choice of Service type determines the accessibility and deployment context o
 
 ### **4. ExternalName** (Brief) 🗺️
 
-* **Function:** Does not proxy traffic. Instead, it maps the Service to a content of the `externalName` field (a DNS name).
+* **Function:** Does not proxy traffic. Instead, it maps the Service to a content of the "externalName" field (a DNS name).
 * **Mechanism:** Returns a $\text{CNAME}$ record of the external DNS name.
 
 ---
