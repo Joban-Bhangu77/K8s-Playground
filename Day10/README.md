@@ -167,7 +167,7 @@ Medium Blog Post
 
 I have documented this lab with a full hands-on explanation and screenshots on Medium:
 
-Medium article: [Add your Medium link here]
+Medium article: [https://medium.com/@jobanjitsinghamritsar/day-10-kubernetes-networking-namespaces-cross-namespace-communication-hands-on-lab-f9b5694cd5ab]
 
 Key Learnings
 
