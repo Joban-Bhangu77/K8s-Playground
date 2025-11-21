@@ -1,169 +1,234 @@
-📘 Day 10: Kubernetes Namespaces, Deployments, and Cross-Namespace Communication
+📘 Day 10 – Kubernetes Namespaces, Deployments & Cross-Namespace Communication
+Kubernetes 40-Day Learning Series – K8s-Playground
+📎 Table of Contents
 
-K8s-Playground | Kubernetes 40-Days Series
+Overview
 
-This hands-on lab, part of the Kubernetes 40-Days Series, provides a practical deep dive into fundamental Kubernetes networking concepts, including isolation via Namespaces, traffic load balancing with ClusterIP Services, and the crucial role of Fully Qualified Domain Names (FQDN) in cross-namespace service resolution.
+Objectives
 
-🎯 Key Objectives
-
-By completing this lab, you will gain hands-on experience and understanding of:
-
-Workload Isolation: Creating and managing isolated environments using Kubernetes Namespaces.
-
-Flat Networking: Verifying flat network behavior (Pod-to-Pod communication) across different namespaces.
-
-Service Load Balancing: Deploying ClusterIP Services and observing their load-balancing capability.
-
-DNS Resolution: Demonstrating the necessity of FQDN (<service-name>.<namespace>.svc.cluster.local) for cross-namespace service access.
-
-Resource Lifecycle: Observing automatic resource cleanup upon Namespace deletion.
-
-🏗️ Lab Architecture
-
-This lab establishes two identical application stacks across two separate namespaces to rigorously test networking and DNS rules.
-
-Component
-
-Namespace ns1
-
-Namespace ns2
-
-Role
-
-Deployment
-
-deploy-ns1 (3x NGINX replicas)
-
-deploy-ns2 (3x NGINX replicas)
-
-Manages scalable, identical workloads.
-
-Service
-
-svc-ns1 (ClusterIP)
-
-svc-ns2 (ClusterIP)
-
-Provides internal, stable IP and load balancing.
-
-Tested Communication
-
-Pod ns1 $\rightarrow$ Pod ns2
-
-Pod ns1 $\rightarrow$ Service ns2 (via FQDN)
-
-Confirms flat networking and DNS scope.
-
-🛠️ Implementation Guide
+Lab Architecture
 
 Prerequisites
 
-A running Kubernetes cluster (e.g., local setup with KinD, Minikube, or a managed service).
+Hands-On Implementation
 
-kubectl installed and configured.
+1. Create Namespaces
 
-Basic Linux shell knowledge for curl and exec commands.
+2. Create Deployments
 
-Step-by-Step Walkthrough
+3. Retrieve Pod IPs
 
-Execute the following commands sequentially to build and test the environment.
+4. Pod-to-Pod Communication
 
-1. Setup Namespaces and Deployments
+5. Scale Deployments
 
-Create the two isolated environments and the initial workloads.
+6. Create Services
 
-# 1. Create Namespaces
+7. Pod-to-Service Communication
+
+8. Service Name DNS Test
+
+9. FQDN-Based Communication
+
+10. Cleanup
+
+Repository Structure
+
+Key Learnings
+
+Medium Blog Post
+
+Conclusion
+
+References
+
+📝 Overview
+
+This lab dives deep into Kubernetes networking fundamentals using namespaces, deployments, ClusterIP services, and DNS resolution.
+You will validate how pods and services communicate within and across namespaces, and understand how Kubernetes DNS behaves in multi-namespace environments.
+
+This hands-on session provides real-world experience for both administration and CKA/CKAD exam preparation.
+
+🎯 Objectives
+
+By the end of Day 10, you will:
+
+Understand namespace-based resource isolation
+
+Deploy isolated workloads inside separate namespaces
+
+Test cross-namespace pod-to-pod communication
+
+Scale deployments and observe replica distribution
+
+Create ClusterIP services and validate their behavior
+
+Understand why service names do not resolve across namespaces
+
+Use FQDN for cross-namespace service-to-service communication
+
+Cleanly delete namespaces and their resources
+
+🧩 Lab Architecture
+Namespaces
+ ├── ns1
+ └── ns2
+
+Deployments
+ ├── deploy-ns1 (nginx, scaled to 3 replicas)
+ └── deploy-ns2 (nginx, scaled to 3 replicas)
+
+Services
+ ├── svc-ns1 (ClusterIP)
+ └── svc-ns2 (ClusterIP)
+
+Communication Paths Tested
+ ├── Pod → Pod (IP-based)
+ ├── Pod → Service (ClusterIP)
+ └── Service → Service (FQDN-based DNS)
+
+🧰 Prerequisites
+
+Before starting, ensure you have:
+
+A functional Kubernetes cluster
+
+kubectl configured and authenticated
+
+Basic understanding of pods, deployments, and namespaces
+
+🛠️ Hands-On Implementation
+1️⃣ Create Namespaces
 kubectl create namespace ns1
 kubectl create namespace ns2
-
-# Verify creation
 kubectl get ns
 
-# 2. Create Deployments (initial 1 replica)
+2️⃣ Create Deployments in Each Namespace
 kubectl create deployment deploy-ns1 --image=nginx -n ns1
 kubectl create deployment deploy-ns2 --image=nginx -n ns2
 
-# 3. Scale Deployments to 3 Replicas
-kubectl scale deployment deploy-ns1 --replicas=3 -n ns1
-kubectl scale deployment deploy-ns2 --replicas=3 -n ns2
-
-# Verify pods in both namespaces
 kubectl get pods -n ns1
 kubectl get pods -n ns2
 
 
-2. Test Flat Networking (Pod-to-Pod)
+Each namespace now has one NGINX pod.
 
-Kubernetes implements a flat network, meaning every Pod can reach every other Pod directly, regardless of the Namespace boundary.
-
-# A. Get the IP of a pod in ns2 (e.g., pod-ns2-ip)
-kubectl get pods -n ns2 -o wide
-
-# B. Select a running pod name from ns1 (e.g., ns1-pod-name)
-NS1_POD=$(kubectl get pods -n ns1 -o jsonpath='{.items[0].metadata.name}')
-
-# C. Execute a curl command from the ns1 pod to the ns2 pod IP
-kubectl exec -it $NS1_POD -n ns1 -- curl http://<NS2_POD_IP>
-
-# ✔️ Expected Outcome: The NGINX default page is returned, confirming flat pod networking.
+3️⃣ Get Pod IP Addresses
+kubectl get pods -o wide -n ns1
+kubectl get pods -o wide -n ns2
 
 
-3. Setup and Test ClusterIP Services
+Record the Pod IPs for testing communication.
 
-Services provide a stable entry point and internal load balancing for the replicas within their namespace.
+4️⃣ Test Pod-to-Pod Communication
 
-# 1. Create ClusterIP Services
+Exec into a pod in ns1:
+
+kubectl exec -it <pod-name> -n ns1 -- /bin/bash
+
+
+Curl pod in ns2:
+
+curl http://<pod-ip-ns2>
+
+
+✔️ Expected: NGINX default HTML response
+Confirms Kubernetes flat networking model.
+
+5️⃣ Scale Deployments to 3 Replicas
+kubectl scale deployment deploy-ns1 --replicas=3 -n ns1
+kubectl scale deployment deploy-ns2 --replicas=3 -n ns2
+
+kubectl get pods -n ns1
+kubectl get pods -n ns2
+
+6️⃣ Create ClusterIP Services
 kubectl expose deployment deploy-ns1 --name=svc-ns1 --port=80 -n ns1
 kubectl expose deployment deploy-ns2 --name=svc-ns2 --port=80 -n ns2
 
-# 2. Get the Service ClusterIPs
 kubectl get svc -n ns1
 kubectl get svc -n ns2
 
+7️⃣ Pod → Service Communication (Cross-Namespace)
 
-4. Test Cross-Namespace DNS Resolution (The FQDN Rule)
+Inside a pod in ns1:
 
-Test the difference between short-name DNS (namespace-scoped) and FQDN (cluster-wide).
-
-# Use the same ns1 pod for testing
-NS1_POD=$(kubectl get pods -n ns1 -o jsonpath='{.items[0].metadata.name}')
-
-# A. Test using the short service name from a different namespace (ns1 trying to reach ns2 service)
-kubectl exec -it $NS1_POD -n ns1 -- curl http://svc-ns2
-
-# ❌ Expected Failure: The service name is not resolved because short DNS names are namespace-scoped.
-
-# B. Test using the Fully Qualified Domain Name (FQDN)
-# FQDN structure: <service-name>.<namespace>.svc.cluster.local
-
-kubectl exec -it $NS1_POD -n ns1 -- curl [http://svc-ns2.ns2.svc.cluster.local](http://svc-ns2.ns2.svc.cluster.local)
-
-# ✔️ Expected Success: The NGINX default page is returned. This is the correct way to reach a service across namespaces.
-
-# C. (Optional) Test the local FQDN
-kubectl exec -it $NS1_POD -n ns1 -- curl [http://svc-ns1.ns1.svc.cluster.local](http://svc-ns1.ns1.svc.cluster.local)
+curl http://<svc-ns2-cluster-ip>
 
 
-5. Cleanup
+✔️ Expected: NGINX HTML output
+ClusterIP is reachable cluster-wide.
 
-Namespaces are powerful tools for resource lifecycle management; deleting a namespace automatically cascades and removes all contained resources (Deployments, Pods, Services, etc.).
+8️⃣ Test Service Name Resolution (Expected Failure)
+curl svc-ns2
 
-# Delete both namespaces
+
+❌ Fails — service names are namespace-scoped.
+
+9️⃣ Use FQDN to Reach Services Across Namespaces
+
+Kubernetes service DNS format:
+
+<service>.<namespace>.svc.cluster.local
+
+
+Test:
+
+curl svc-ns2.ns2.svc.cluster.local
+curl svc-ns1.ns1.svc.cluster.local
+
+
+✔️ Works across namespaces
+Confirms how Kubernetes DNS hierarchy functions.
+
+🔟 Cleanup (Delete Namespaces)
 kubectl delete ns ns1
 kubectl delete ns ns2
 
-# Verify they are gone (Status: Terminating or not found)
-kubectl get ns
 
+Namespace deletion removes all deployments, pods, and services.
 
-🧠 Key Learnings Summary
+🔗 Medium Blog Post
 
-Networking: Kubernetes uses a flat network structure that allows Pods to communicate directly across namespace boundaries using their Pod IP addresses.
+A detailed hands-on walkthrough with screenshots is available here:
 
-Isolation: Namespaces provide logical isolation and scope for resource names, not network isolation (which requires NetworkPolicies).
+👉 Medium Blog: [https://medium.com/@jobanjitsinghamritsar/day-10-kubernetes-networking-namespaces-cross-namespace-communication-hands-on-lab-f9b5694cd5ab]
 
-DNS Scope: Service short names (svc-ns2) are only resolvable within their own namespace.
+🧠 Key Learnings
 
-Cross-Namespace Access: To reliably access a service from a different namespace, the Fully Qualified Domain Name (FQDN) must be used, including the service name, namespace, and cluster domain (svc-ns2.ns2.svc.cluster.local).
+Kubernetes networking is flat—pods can communicate across namespaces
 
-Cleanup: Deleting a namespace is an efficient, atomic way to clean up all associated resources within a cluster environment.
+ClusterIP services provide stable entrypoints and load-balancing
+
+DNS service names resolve only within the same namespace
+
+Cross-namespace communication requires FQDN
+
+Scaling deployments distributes load and increases availability
+
+Namespace deletion automatically clears all resources
+
+🏁 Conclusion
+
+This lab offered a practical, in-depth understanding of how Kubernetes handles networking, DNS, and namespace isolation.
+By testing communication at multiple levels—pods, services, and FQDN—you gain real operational insight into how real-world microservices interact inside a Kubernetes cluster.
+
+Mastering these concepts prepares you for advanced networking topics such as:
+
+NetworkPolicies
+
+Ingress & load balancing
+
+Service Mesh (Istio, Linkerd)
+
+Multi-tenant cluster architecture
+
+Day 10 strengthens your foundation for the rest of the Kubernetes journey.
+
+📚 References
+
+Kubernetes Docs – https://kubernetes.io/docs
+
+Services & Networking – https://kubernetes.io/docs/concepts/services-networking/
+
+DNS for Services – https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
