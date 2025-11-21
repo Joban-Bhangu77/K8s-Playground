@@ -1,191 +1,163 @@
 # Day 10 – Kubernetes Namespaces and Cross-Namespace Communication
-Kubernetes 40-Day Learning Series – K8s-Playground
 
-## Overview
-This lab focuses on Kubernetes namespaces, deployments, services, and DNS-based communication across namespaces.  
-You validate:
+Welcome to Day 10 of the Kubernetes 40-Day Series. In this session, we focused on understanding how namespaces work in Kubernetes, how workloads operate inside them, and how pods and services communicate across namespace boundaries. Namespaces are one of the most essential concepts in Kubernetes for organizing, isolating, and managing resources in multi-tenant or multi-environment clusters.
 
-- Pod-to-pod communication across namespaces
-- Pod-to-service communication using ClusterIP
-- DNS behavior and service name resolution
-- Use of FQDN (Fully Qualified Domain Name) for cross-namespace access
-- Namespace cleanup and automatic resource deletion
+## Why Namespaces Matter
 
-This exercise strengthens your understanding of Kubernetes networking and prepares you for real-world multi-namespace environments.
+As clusters grow, managing all resources in a single default namespace becomes difficult. Namespaces provide logical separation for teams, applications, and environments such as dev, staging, and production. They also help avoid naming conflicts, apply RBAC, and enforce resource quotas.
 
-## Objectives
-By the end of this lab, you will be able to:
+Namespaces allow you to:
 
-- Create and use Kubernetes namespaces
-- Deploy workloads into specific namespaces
-- Retrieve pod IPs and test connectivity
-- Scale deployments and verify replicas
-- Expose deployments using ClusterIP services
-- Understand why service names are namespace-scoped
-- Use FQDN to access services across namespaces
-- Clean up namespaces and their resources
+- Organize objects by project, team, or environment
+- Prevent naming collisions (resources only need unique names *within* a namespace)
+- Apply access control through Role-Based Access Control (RBAC)
+- Limit resource usage via ResourceQuotas
+- Create isolated virtual environments inside a single cluster
 
-## Lab Architecture
+Not all Kubernetes objects are namespaced. Resources like Nodes, PersistentVolumes, ClusterRoles, and StorageClasses exist at the cluster level.
 
-Namespaces:
-- ns1
-- ns2
+## How Namespace Scoping Works
 
-Deployments:
-- deploy-ns1 (nginx, scaled to 3 replicas)
-- deploy-ns2 (nginx, scaled to 3 replicas)
+A namespaced object belongs to one namespace only. For example, you can have two Deployments named "nginx-app" as long as each one is in a different namespace (such as dev and prod). If you create a resource without specifying a namespace, Kubernetes automatically places it in the default namespace.
 
-Services:
-- svc-ns1 (ClusterIP)
-- svc-ns2 (ClusterIP)
+Kubernetes clusters come with these built-in namespaces:
 
-Scenarios tested:
-- Pod to pod (IP-based, cross-namespace)
-- Pod to service (ClusterIP)
-- Service access using FQDN across namespaces
-- Service name access across namespaces (expected failure)
+- **default**: used when no namespace is specified
+- **kube-system**: contains system components (kube-dns, kube-proxy, scheduler, etc.)
+- **kube-public**: readable by all users; rarely used directly
+- **kube-node-lease**: used for node heartbeat tracking
 
-## Steps Performed
+## Namespaces and DNS
 
-### 1. Create namespaces
-
-```bash
-kubectl create namespace ns1
-kubectl create namespace ns2
-
-kubectl get ns
-
-2. Create deployments in each namespace
-kubectl create deployment deploy-ns1 --image=nginx -n ns1
-kubectl create deployment deploy-ns2 --image=nginx -n ns2
-
-kubectl get pods -n ns1
-kubectl get pods -n ns2
-
-3. Get pod IP addresses
-kubectl get pods -o wide -n ns1
-kubectl get pods -o wide -n ns2
-
-
-Use the IP addresses shown here for curl tests.
-
-4. Test pod-to-pod communication
-
-Exec into a pod in ns1:
-
-kubectl exec -it <pod-name-in-ns1> -n ns1 -- /bin/bash
-
-
-From inside the pod, curl a pod IP in ns2:
-
-curl http://<pod-ip-in-ns2>
-
-
-You should receive the default NGINX HTML response.
-
-5. Scale deployments to three replicas
-kubectl scale deployment deploy-ns1 --replicas=3 -n ns1
-kubectl scale deployment deploy-ns2 --replicas=3 -n ns2
-
-kubectl get pods -n ns1
-kubectl get pods -n ns2
-
-
-Each namespace should now have three pods.
-
-6. Create ClusterIP services
-kubectl expose deployment deploy-ns1 --name=svc-ns1 --port=80 -n ns1
-kubectl expose deployment deploy-ns2 --name=svc-ns2 --port=80 -n ns2
-
-kubectl get svc -n ns1
-kubectl get svc -n ns2
-
-
-Note the ClusterIP of each service.
-
-7. Test pod-to-service communication (using service IP)
-
-Exec into a pod in ns1:
-
-kubectl exec -it <pod-name-in-ns1> -n ns1 -- /bin/bash
-
-
-From inside that pod, curl the ClusterIP of svc-ns2:
-
-curl http://<svc-ns2-cluster-ip>
-
-
-You should again see the NGINX default page.
-This confirms that ClusterIP services are reachable cluster-wide.
-
-8. Test service name resolution across namespaces (expected failure)
-
-Still inside the ns1 pod, run:
-
-curl svc-ns2
-
-
-This should fail with a message similar to:
-
-"Could not resolve host"
-or
-
-"Could not resolve dns name"
-
-This happens because service names are only resolvable inside their own namespace.
-
-9. Use FQDN for cross-namespace service access
-
-Kubernetes service FQDN format is:
+Kubernetes provides DNS resolution for services and pods. Service names resolve only inside their own namespace. To communicate across namespaces, you must use the Fully Qualified Domain Name (FQDN):
 
 <service-name>.<namespace>.svc.cluster.local
 
 
-From the ns1 pod:
+Example:
+
 
 curl svc-ns2.ns2.svc.cluster.local
 
 
-From a pod in ns2 (similar test the other way):
+Short names like `svc-ns2` only work inside the ns2 namespace.
 
-curl svc-ns1.ns1.svc.cluster.local
+## Practical Hands-On Work (Day 10 Lab)
+
+### 1. Create two namespaces
 
 
-Both commands should succeed and return the NGINX HTML page.
 
-10. Cleanup
+kubectl create namespace ns1
+kubectl create namespace ns2
 
-When the lab is complete, delete both namespaces:
+
+### 2. Create a Deployment in each namespace
+
+
+
+kubectl create deployment deploy-ns1 --image=nginx -n ns1
+kubectl create deployment deploy-ns2 --image=nginx -n ns2
+
+
+### 3. Retrieve Pod IPs
+
+
+
+kubectl get pods -o wide -n ns1
+kubectl get pods -o wide -n ns2
+
+
+Pods in different namespaces can still communicate because Kubernetes uses a flat cluster network.
+
+### 4. Test Pod-to-Pod communication
+
+Exec into a pod in ns1:
+
+
+
+kubectl exec -it <pod-name-ns1> -n ns1 -- /bin/bash
+
+
+Inside the pod, curl the Pod IP in ns2:
+
+
+
+curl http://<pod-ip-ns2>
+
+
+This succeeds because pod networking is cluster-wide.
+
+### 5. Scale both deployments to three replicas
+
+
+
+kubectl scale deployment deploy-ns1 --replicas=3 -n ns1
+kubectl scale deployment deploy-ns2 --replicas=3 -n ns2
+
+
+### 6. Create services for each deployment
+
+
+
+kubectl expose deployment deploy-ns1 --name=svc-ns1 --port=80 -n ns1
+kubectl expose deployment deploy-ns2 --name=svc-ns2 --port=80 -n ns2
+
+
+### 7. Test cross-namespace service communication using service IP
+
+Inside a pod in ns1:
+
+
+
+curl http://<svc-ns2-cluster-ip>
+
+
+This works because ClusterIP services are reachable across the cluster.
+
+### 8. Test service name resolution (expected to fail)
+
+
+
+curl svc-ns2
+
+
+This fails because service names are only resolvable within their own namespace.
+
+### 9. Use the FQDN to access services across namespaces
+
+
+
+curl svc-ns2.ns2.svc.cluster.local
+
+
+This works, confirming how Kubernetes DNS resolves cross-namespace service traffic.
+
+### 10. Cleanup
+
+
 
 kubectl delete ns ns1
 kubectl delete ns ns2
 
 
-This will remove all deployments, pods, and services created inside them.
+Deleting namespaces automatically removes the deployments, pods, and services inside them.
 
-Medium Blog Post
+## Key Takeaways
 
-I have documented this lab with a full hands-on explanation and screenshots on Medium:
+- Namespaces isolate Kubernetes objects logically but do not block network traffic by default.
+- Pod IPs are accessible across the entire cluster.
+- Service names work only within the same namespace.
+- FQDN is required to access services across namespaces.
+- Scaling deployments increases redundancy and load distribution.
+- Namespace deletion is an effective cleanup mechanism.
+- Namespaces, when combined with RBAC and ResourceQuotas, provide strong multi-tenant isolation.
 
-Medium article: [https://medium.com/@jobanjitsinghamritsar/day-10-kubernetes-networking-namespaces-cross-namespace-communication-hands-on-lab-f9b5694cd5ab]
+## Medium Blog Post
 
-Key Learnings
+Full hands-on documentation with screenshots is available here:  
+(Add your Medium link here)
 
-Kubernetes uses a flat network model; pods can reach each other across namespaces.
+## Conclusion
 
-Namespaces isolate resources logically but do not block network traffic by default.
-
-ClusterIP services provide stable virtual IPs and load balancing across replicas.
-
-DNS service names are namespace-scoped and do not resolve across namespaces.
-
-FQDN is required for cross-namespace service discovery.
-
-Deleting a namespace automatically deletes all underlying resources.
-
-Conclusion
-
-This Day 10 lab improved understanding of how Kubernetes handles networking, services, and DNS in multi-namespace setups.
-By testing pod-to-pod, pod-to-service, and FQDN-based communication, you now have a clear, practical picture of how applications talk to each other inside a Kubernetes cluster.
-
-These fundamentals are essential before moving on to more advanced topics such as NetworkPolicies, Ingress controllers, service mesh, and secure multi-tenant cluster design.
+Day 10 provided a clear understanding of how Kubernetes handles resource organization, pod networking, and DNS resolution across namespaces. This knowledge is essential for building multi-environment, multi-team Kubernetes architectures. With these fundamentals in place, the next steps will involve NetworkPolicies, Ingress controllers, and service mesh concepts to secure and manage traffic flow more effectively.
